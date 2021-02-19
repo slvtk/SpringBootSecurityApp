@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/education
+    username: postgres
+    password: 6270
+    driverClassName: org.postgresql.Driver
+    data: 'classpath:data.sql'
+#    initialization-mode: always
+  jpa:
+    show-sql: true
+#    hibernate:
+#      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  batch:
+    initialize-schema: always
+server:
+  port: 80

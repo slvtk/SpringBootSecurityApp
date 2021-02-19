@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<tr th:each="student : ${students}">
+    <td><span th:text="${student.getId()}"> ID </span></td>
+    <td><span th:text="${student.getName()}"> Name </span></td>
+    <br>
+</tr>
+<br>
+<a th:href="@{/logout}">Logout</a>
+</body>
+</html>
