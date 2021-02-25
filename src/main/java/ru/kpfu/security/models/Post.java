@@ -1,9 +1,9 @@
-package ru.kpfu.security.post;
+package ru.kpfu.security.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.kpfu.security.comment.Comment;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.List;

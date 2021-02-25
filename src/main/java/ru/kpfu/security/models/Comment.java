@@ -1,4 +1,4 @@
-package ru.kpfu.security.comment;
+package ru.kpfu.security.models;
 
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

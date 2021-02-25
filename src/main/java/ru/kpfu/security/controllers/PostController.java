@@ -1,9 +1,11 @@
-package ru.kpfu.security.post;
+package ru.kpfu.security.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kpfu.security.comment.CommentRepository;
+import ru.kpfu.security.repositories.CommentRepository;
+import ru.kpfu.security.models.Post;
+import ru.kpfu.security.repositories.PostRepository;
 
 import java.util.Optional;
 

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
+</head>
+<body>
+<p th:text="${currentUser.getName()}"> Name </p>
+<p th:text="${currentUser.getAuthorities()}"> Authorities </p>
+<p th:text="${currentUser.getCity()}"> City </p>
+<p th:text="${currentUser.getAbout()}"> About </p>
+<br>
+</tr>
+</body>
+</html>

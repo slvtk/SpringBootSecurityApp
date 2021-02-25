@@ -1,21 +1,36 @@
 spring:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: nizamovik3@gmail.com
+    password: Salavat62704130
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
+
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/education
     username: postgres
     password: 6270
     driverClassName: org.postgresql.Driver
-    data: 'classpath:data.sql'
-#    initialization-mode: always
+  #    data: 'classpath:data.sql'
+  #    initialization-mode: always
   jpa:
     show-sql: true
-#    hibernate:
-#      ddl-auto: create-drop
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-  batch:
-    initialize-schema: always
+#  batch:
+#    initialize-schema: always
 server:
   port: 80

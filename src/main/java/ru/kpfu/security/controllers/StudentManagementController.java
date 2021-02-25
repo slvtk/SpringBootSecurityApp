@@ -1,8 +1,10 @@
-package ru.kpfu.security.student;
+package ru.kpfu.security.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.kpfu.security.models.Student;
+import ru.kpfu.security.repositories.StudentRepository;
 
 import java.util.List;
 
@@ -16,26 +18,26 @@ public class StudentManagementController {
         this.studentRepository = studentRepository;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','ADMIN_TRAINEE')")
     public List<Student> getStudents() {
         return studentRepository.findAll();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @PreAuthorize("hasAuthority('students:write')")
     public Student registerStudent(@RequestBody Student student) {
         return studentRepository.save(student);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{studentId}")
-    @PreAuthorize("hasAuthority('students:write')")
     public void deleteStudent(@PathVariable Long studentId) {
         studentRepository.deleteById(studentId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{studentId}")
-    @PreAuthorize("hasAuthority('students:write')")
     public Student updateStudent(@RequestBody Student editedStudent,
                                  @PathVariable Long studentId) {
         Student student = studentRepository.findById(studentId).get();

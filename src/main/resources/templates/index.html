@@ -6,17 +6,26 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Index</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-3 justify-content-center">
+        <div class="col-4 text-center">
+            <p class="display-4">Index page of <span class="text-danger">my</span>App</p>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-2 justify-content-center">
             <img th:src="@{/img/logo.png}" alt="nezuko" style="width: 100%;">
-            <p class="h3">Index page of myApp</p>
-            <a th:href="@{/login}">Log in</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-1 text-center">
+            <a class="text-dark text-decoration-none" th:href="@{/login}">Log in</a>
+        </div>
+        <div class="col-1 text-center">
+            <a class="text-dark text-decoration-none" th:href="@{/registration}">Register</a>
         </div>
     </div>
 </div>

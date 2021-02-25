@@ -1,10 +1,12 @@
-package ru.kpfu.security.comment;
+package ru.kpfu.security.controllers;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-import ru.kpfu.security.post.Post;
-import ru.kpfu.security.post.PostRepository;
+import ru.kpfu.security.repositories.CommentRepository;
+import ru.kpfu.security.models.Comment;
+import ru.kpfu.security.models.Post;
+import ru.kpfu.security.repositories.PostRepository;
 
 import java.util.List;
 import java.util.Optional;

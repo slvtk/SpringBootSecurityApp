@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
+</head>
+<body>
+<div class="container justify-content-center">
+    <div class="row justify-content-center">
+        <form class="form-signin col-4" th:object="${registrationForm}" method="post" th:action="@{/registration}">
+            <h2 class="form-signin-heading">Registration</h2>
+            <p>
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" th:field="*{email}" class="form-control" placeholder="Username"
+                       autofocus="">
+            </p>
+            <p>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Password">
+            </p>
+            <p>
+                <label for="name" class="sr-only">Password</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Name">
+            </p>
+            <p>
+                <label for="city" class="sr-only">Password</label>
+                <input type="text" id="city" th:field="*{city}" class="form-control" placeholder="City">
+            </p>
+            <p>
+                <label for="about" class="sr-only">Password</label>
+                <input type="text" id="about" th:field="*{about}" class="form-control" placeholder="About">
+            </p>
+            <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+        </form>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+        <a th:href="@{/login}" class="text-decoration-none col-4">
+            <button class="btn btn-lg btn-primary btn-block">Log In</button>
+        </a>
+    </div>
+</div>
+</body>
+</html>
