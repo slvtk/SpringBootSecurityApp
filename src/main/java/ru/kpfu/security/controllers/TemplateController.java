@@ -1,14 +1,13 @@
 package ru.kpfu.security.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.security.models.RegistrationForm;
 import ru.kpfu.security.models.Student;
 import ru.kpfu.security.repositories.StudentRepository;
-import ru.kpfu.security.services.MailSender;
 import ru.kpfu.security.services.RegistrationService;
 
 import java.util.List;
@@ -21,8 +20,7 @@ public class TemplateController {
 
     @Autowired
     public TemplateController(StudentRepository studentRepository,
-                              RegistrationService registrationService,
-                              MailSender mailSender) {
+                              RegistrationService registrationService) {
         this.studentRepository = studentRepository;
         this.registrationService = registrationService;
     }
@@ -36,7 +34,7 @@ public class TemplateController {
     public String getAllPostsTemplate(Model model) {
         List<Student> students = studentRepository.findAll();
         model.addAttribute("students", students);
-        return "students";
+        return "student/students";
     }
 
     @GetMapping("registration")
@@ -52,10 +50,10 @@ public class TemplateController {
     }
 
     @GetMapping("profile")
-    public String profile(Model model) {
-        Student student = (Student) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String profile(Model model,
+                          @AuthenticationPrincipal Student student) {
         model.addAttribute("currentUser", student);
-        return "profile";
+        return "student/profile";
     }
 
     @GetMapping("confirm")

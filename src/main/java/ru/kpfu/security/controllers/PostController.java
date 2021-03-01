@@ -1,64 +1,84 @@
 package ru.kpfu.security.controllers;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.kpfu.security.repositories.CommentRepository;
+import ru.kpfu.security.models.Comment;
 import ru.kpfu.security.models.Post;
+import ru.kpfu.security.models.PostDTO;
+import ru.kpfu.security.models.Student;
 import ru.kpfu.security.repositories.PostRepository;
+import ru.kpfu.security.services.PostService;
+import ru.kpfu.security.utils.PostMapper;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api/v1/posts")
+@Controller
+@RequestMapping("posts")
 public class PostController {
 
-    PostRepository postRepository;
-    CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final PostService postService;
+    private final PostMapper postMapper;
 
-    PostController(PostRepository postRepository, CommentRepository commentRepository) {
+    @Autowired
+    public PostController(PostRepository postRepository,
+                          PostService postService,
+                          PostMapper postMapper) {
         this.postRepository = postRepository;
-        this.commentRepository = commentRepository;
+        this.postService = postService;
+        this.postMapper = postMapper;
     }
+
 
     @GetMapping
-    public Iterable<Post> allPosts() {
-        return postRepository.findAll();
+    public String allPosts(Model model) {
+        model.addAttribute("posts", postRepository.findAll());
+        return "post/posts";
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<Post> post(@PathVariable Long postId) {
+    @GetMapping("{postId}")
+    public String post(@PathVariable Long postId,
+                       @ModelAttribute Comment comment,
+                       Model model) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (postOpt.isPresent()) {
-            return new ResponseEntity<>(postOpt.get(), HttpStatus.OK);
+            model.addAttribute("post", postOpt.get());
+            model.addAttribute("comment", comment);
+            model.addAttribute("comments", postOpt.get().getComments());
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return "post/post";
     }
 
-    @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        return postRepository.save(post);
+    @GetMapping("{postId}/rate")
+    public String ratePost(@PathVariable Long postId,
+                           @AuthenticationPrincipal Student student) {
+        postService.ratePost(postId, student.getId());
+        return "redirect:";
     }
 
+    @GetMapping("/{postId}/edit")
+    public String editPost(@PathVariable Long postId,
+                           Model model) {
+        Optional<Post> postOpt = postRepository.findById(postId);
+        postOpt.ifPresent(post -> model.addAttribute("postDTO", postMapper.postToDto(post)));
+        return "post/post_edit";
+    }
+
+
+    //TODO: разобраться почему не работает валидация
     @PatchMapping("/{postId}")
-    public Post editPost(@RequestBody Post editedPost,
-                         @PathVariable Long postId) {
-        Optional<Post> postOpt = postRepository.findById(postId);
-        if (postOpt.isPresent()) {
-            Post post = postOpt.get();
-            if (editedPost.getTitle() != null) {
-                post.setTitle(editedPost.getTitle());
-            }
-            if (editedPost.getText() != null) {
-                post.setText(editedPost.getText());
-            }
-            return postRepository.save(post);
+    public String patch(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
+                        BindingResult bindingResult,
+                        @PathVariable Long postId) {
+        if (bindingResult.hasErrors()) {
+            return "post/post_edit";
         }
-        return null;
-    }
-
-    @DeleteMapping("/{postId}")
-    public void deletePost(@PathVariable Long postId) {
-        postRepository.deleteById(postId);
+        postService.updatePost(postDTO, postId);
+        return "redirect:";
     }
 }

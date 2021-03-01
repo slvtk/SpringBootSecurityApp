@@ -15,4 +15,15 @@ public class Comment {
     @CreationTimestamp
     private Date createdAt;
     private String text;
+    @ManyToOne
+    private Student student;
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", createdAt=" + createdAt +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

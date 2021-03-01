@@ -1,4 +1,4 @@
-package ru.kpfu.security.controllers;
+package ru.kpfu.security.controllers.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,11 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/management/api/v1/students")
-public class StudentManagementController {
+public class StudentManagementRestController {
     StudentRepository studentRepository;
 
     @Autowired
-    public StudentManagementController(StudentRepository studentRepository) {
+    public StudentManagementRestController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 

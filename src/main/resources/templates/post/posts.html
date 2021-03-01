@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
+</head>
+<body>
+<div th:each="post : ${posts}">
+    <a th:href="@{/posts/{id}(id=${post.getId()})}">
+        <h1><span th:text="${post.getTitle()}"> Title </span></h1>
+    </a>
+    <p><span th:text="${post.getText()}"> Text </span></p>
+    <p th:text="${post.getLikes().size()} + ' ' + like"></p>
+    <br>
+    <hr>
+    <br>
+</div>
+</body>
+</html>

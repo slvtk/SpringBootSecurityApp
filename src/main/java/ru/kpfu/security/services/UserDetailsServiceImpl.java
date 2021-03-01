@@ -73,6 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public void enableStudent(Student student) {
-        studentRepository.findStudentByEmail(student.getEmail()).get().setEnabled(true);
+        Optional<Student> studentOpt = studentRepository.findStudentByEmail(student.getEmail());
+        studentOpt.ifPresent(value -> value.setEnabled(true));
     }
 }

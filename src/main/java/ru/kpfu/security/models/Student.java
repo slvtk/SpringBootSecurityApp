@@ -1,15 +1,15 @@
 package ru.kpfu.security.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,6 +27,14 @@ public class Student implements UserDetails {
     private Role role;
     private boolean locked;
     private boolean enabled;
+    @ManyToMany(mappedBy = "likes")
+    @JsonIgnore
+    private List<Post> likedPosts;
+    @OneToMany
+    private List<Post> posts;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
+    List<Comment> comments;
 
     public Student(String email,
                    String password,

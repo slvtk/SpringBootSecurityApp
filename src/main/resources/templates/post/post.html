@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
+</head>
+<body class="justify-content-center">
+<div class="container-fluid col-4" style="background-color: antiquewhite">
+    <div class="row">
+        <div class="col">
+            <h1 th:text="${post.getTitle()}" class="display-4"> Title </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p th:text="${post.getText()}" class="lead"> Text </p>
+        </div>
+    </div>
+    <div class="row justify-around">
+        <div class="col-2">
+            <a th:href="@{/posts/{id}/rate(id=${post.getId()})}">
+                <img th:src="@{/img/like.png}" style="width: 50%" alt="like_button" src="#">
+            </a>
+        </div>
+        <div class="col-3">
+            <p th:text="${post.getLikes().size()} + ' ' + like"></p>
+        </div>
+        <div class="col-5">
+        </div>
+        <div class="col-2">
+            <a th:href="@{/posts/{id}/edit(id=${post.getId()})}">Edit</a>
+        </div>
+    </div>
+
+    <form action="#" th:action="@{/posts/{postId}/comments(postId=${post.getId()})}"
+          th:object="${comment}" th:method="post" class="form-group">
+        <label for="text">Comment</label>
+        <textarea type="text" th:field="*{text}" id="text" placeholder="Commentary" class="form-control" rows="5"></textarea>
+        <span style="color: red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></span><br>
+        <input type="submit" value="Comment" class="btn btn-primary">
+    </form>
+    <div th:each="comment : ${comments}" class="row">
+        <p th:text="${comment.getStudent().getName()} + ' ' +
+             ${comment.getCreatedAt()} + ': ' +
+             ${comment.getText()}" class="col-11"> Text </p>
+        <form action="#"
+              th:action="@{/posts/{postId}/comments/{commentId}(postId=${post.getId()}, commentId=${comment.getId()})}"
+              th:method="delete"
+              class="col-1">
+            <input type="image" src="#" alt="trash" th:src="@{/img/logo.png}" style="width: 100%">
+        </form>
+    </div>
+</div>
+</body>
+</html>
