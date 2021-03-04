@@ -1,6 +1,8 @@
 package ru.kpfu.security.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,10 +57,14 @@ public class PostController {
     }
 
     @GetMapping("{postId}/rate")
-    public String ratePost(@PathVariable Long postId,
-                           @AuthenticationPrincipal Student student) {
+    public ResponseEntity<String> ratePost(@PathVariable Long postId,
+                                           @AuthenticationPrincipal Student student) {
         postService.ratePost(postId, student.getId());
-        return "redirect:";
+        Optional<Post> postOpt = postRepository.findById(postId);
+        if (postOpt.isPresent()) {
+            return ResponseEntity.ok(String.valueOf(postOpt.get().getLikes().size()));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @GetMapping("/{postId}/edit")
@@ -69,8 +75,6 @@ public class PostController {
         return "post/post_edit";
     }
 
-
-    //TODO: разобраться почему не работает валидация
     @PatchMapping("/{postId}")
     public String patch(@Valid @ModelAttribute("postDTO") PostDTO postDTO,
                         BindingResult bindingResult,
@@ -80,5 +84,17 @@ public class PostController {
         }
         postService.updatePost(postDTO, postId);
         return "redirect:";
+    }
+
+    @GetMapping("/new")
+    public String createPostPage(@ModelAttribute PostDTO postDTO) {
+        return "post/post_new";
+    }
+
+    @PostMapping()
+    public String createPost(@ModelAttribute PostDTO postDTO,
+                             @AuthenticationPrincipal Student student) {
+        postRepository.save(new Post(postDTO.getTitle(), postDTO.getText(), student));
+        return "redirect:/posts";
     }
 }

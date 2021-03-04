@@ -5,16 +5,18 @@
     <title>Posts</title>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
 </head>
-<body>
-<div th:each="post : ${posts}">
-    <a th:href="@{/posts/{id}(id=${post.getId()})}">
-        <h1><span th:text="${post.getTitle()}"> Title </span></h1>
-    </a>
-    <p><span th:text="${post.getText()}"> Text </span></p>
-    <p th:text="${post.getLikes().size()} + ' ' + like"></p>
-    <br>
-    <hr>
-    <br>
+<body class="justify-content-center">
+<div th:insert="~{navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-6">
+    <div class="row alert alert-primary" th:each="post : ${posts}">
+        <a th:href="@{/posts/{id}(id=${post.getId()})}" class=" col text-decoration-none">
+            <h1 class="display-4" th:text="${post.getTitle()}"> Title </h1>
+        </a>
+        <p  class="col" th:text="${post.getLikes().size()} + ' ' + like + ' ' +
+                    ${post.getComments().size()} + ' ' + comments ">
+        </p>
+    </div>
 </div>
 </body>
 </html>

@@ -3,13 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Post</title>
+    <script th:src="@{/webjars/jquery/3.5.1/dist/jquery.min.js}"></script>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
 </head>
+<script>
+    $(document).ready(function () {
+
+        $("#rate-href").on("click", function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: $("#rate-href").attr("href"),
+                type: "GET",
+                success: function (res) {
+                    $('#like-count').text(res + ' like')
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+
 <body class="justify-content-center">
-<div class="container-fluid col-4" style="background-color: antiquewhite">
+<div th:insert="~{navigation::navbar}"></div>
+<br>
+<div class="container-fluid col-4 alert alert-primary">
     <div class="row">
         <div class="col">
             <h1 th:text="${post.getTitle()}" class="display-4"> Title </h1>
+            <p th:text="'Written by: ' + ${post.getAuthor().getName()}" class="text-secondary">Author</p>
         </div>
     </div>
     <div class="row">
@@ -18,13 +43,13 @@
         </div>
     </div>
     <div class="row justify-around">
-        <div class="col-2">
-            <a th:href="@{/posts/{id}/rate(id=${post.getId()})}">
+        <div class="col-2 justify-content-center">
+            <a th:href="@{/posts/{id}/rate(id=${post.getId()})}" id="rate-href">
                 <img th:src="@{/img/like.png}" style="width: 50%" alt="like_button" src="#">
             </a>
+            <p th:text="${post.getLikes().size()} + ' ' + like" id="like-count"></p>
         </div>
         <div class="col-3">
-            <p th:text="${post.getLikes().size()} + ' ' + like"></p>
         </div>
         <div class="col-5">
         </div>
@@ -36,7 +61,8 @@
     <form action="#" th:action="@{/posts/{postId}/comments(postId=${post.getId()})}"
           th:object="${comment}" th:method="post" class="form-group">
         <label for="text">Comment</label>
-        <textarea type="text" th:field="*{text}" id="text" placeholder="Commentary" class="form-control" rows="5"></textarea>
+        <textarea type="text" th:field="*{text}" id="text" placeholder="Commentary" class="form-control"
+                  rows="5"></textarea>
         <span style="color: red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></span><br>
         <input type="submit" value="Comment" class="btn btn-primary">
     </form>
@@ -48,7 +74,7 @@
               th:action="@{/posts/{postId}/comments/{commentId}(postId=${post.getId()}, commentId=${comment.getId()})}"
               th:method="delete"
               class="col-1">
-            <input type="image" src="#" alt="trash" th:src="@{/img/logo.png}" style="width: 100%">
+            <input type="image" src="#" alt="trash" th:src="@{/img/trash.png}" style="width: 100%">
         </form>
     </div>
 </div>

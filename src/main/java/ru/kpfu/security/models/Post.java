@@ -19,6 +19,12 @@ public class Post {
         this.text = text;
     }
 
+    public Post(String title, String text, Student author) {
+        this.title = title;
+        this.text = text;
+        this.author = author;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,5 +41,4 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private List<Student> likes;
-
 }

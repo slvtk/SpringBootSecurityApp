@@ -31,10 +31,14 @@ public class Student implements UserDetails {
     @JsonIgnore
     private List<Post> likedPosts;
     @OneToMany
+    @JoinColumn(name = "author_id")
     private List<Post> posts;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_id")
+    private List<File> files;
 
     public Student(String email,
                    String password,

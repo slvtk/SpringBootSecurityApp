@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload your file</title>
+    <script th:src="@{/webjars/jquery/3.5.1/dist/jquery.min.js}"></script>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css}"/>
+</head>
+<body>
+<script>
+    $(document).ready(function () {
+
+        $("#file-upload-form").on("submit", function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "/fileUpload",
+                type: "POST",
+                data: new FormData(this),
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (res) {
+                    $('#pic').attr('src', res);
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+<form id="file-upload-form">
+    <label for="file-upload-input">Select file to upload</label>
+    <input type="file" id="file-upload-input" name="file">
+    <button type="submit">Start Upload</button>
+</form>
+<img alt="pic" src="" id="pic">
+</body>
+</html>
