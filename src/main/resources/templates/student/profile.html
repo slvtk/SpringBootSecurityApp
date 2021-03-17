@@ -2,29 +2,47 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Page</title>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
 </head>
 <body>
 <div th:insert="~{navigation::navbar}"></div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
+<br>
+<div class="container-fluid col-10">
+    <div class="row alert alert-primary">
+        <div class="col-4 my-auto">
+            <img style="width: 256px; height: 256px; border-radius: 50%;object-fit: cover"
+                 th:src="${avatar?.getPath()}">
+        </div>
+        <div class="col-8">
             <h1 th:text="${student.getName()}" class="display-1"> Name </h1>
             <p th:text="${student.getCity()}" class="display-4"> City </p>
             <p th:text="${student.getAbout()}" class="lead"> About </p>
+            <a th:href="@{/profile/edit}">Edit</a>
         </div>
     </div>
-    <div class="row" style="background-color: cadetblue">
-        <div class="col offset-2">
+    <br>
+    <div class="row justify-content-around alert alert-primary">
+        <div class="col-3 text-center">
             <p class="lead">
                 Liked posts
             </p>
+            <div th:each="likedPost : ${student.getLikedPosts()}">
+                <a th:href="@{/posts/{id}(id=${likedPost.getId()})}">
+                    <p th:text="${likedPost.getTitle()}" class="lead"> Liked post </p>
+                </a>
+            </div>
         </div>
-        <div class="col offset-2">
+        <div class="col-3 text-center">
             <p class="lead">
-                Written posts
+                Published posts
             </p>
+            <div th:each="publishedPost : ${student.getPosts()}">
+                <a th:href="@{/posts/{id}(id=${publishedPost.getId()})}">
+                    <p th:text="${publishedPost.getTitle()}" class="lead"> Published
+                        post </p>
+                </a>
+            </div>
         </div>
     </div>
 </div>

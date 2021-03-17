@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.kpfu.security.models.File;
 import ru.kpfu.security.models.Student;
+import ru.kpfu.security.repositories.FileRepository;
 import ru.kpfu.security.repositories.StudentRepository;
 
 import java.util.Optional;
@@ -16,10 +18,13 @@ import java.util.Optional;
 public class StudentController {
 
     private final StudentRepository studentRepository;
+    private final FileRepository fileRepository;
 
     @Autowired
-    public StudentController(StudentRepository studentRepository) {
+    public StudentController(StudentRepository studentRepository,
+                             FileRepository fileRepository) {
         this.studentRepository = studentRepository;
+        this.fileRepository = fileRepository;
     }
 
     @GetMapping
@@ -35,6 +40,8 @@ public class StudentController {
         if (studentOpt.isPresent()) {
             Student student = studentOpt.get();
             model.addAttribute("student", student);
+            Optional<File> avatarOpt = fileRepository.findAvatarByStudentId(student.getId());
+            avatarOpt.ifPresent(file -> model.addAttribute("avatar", file));
         }
         return "student/student_page";
     }

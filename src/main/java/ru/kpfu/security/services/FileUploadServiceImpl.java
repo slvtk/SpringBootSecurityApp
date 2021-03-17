@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.security.models.File;
+import ru.kpfu.security.models.FileType;
 import ru.kpfu.security.models.Student;
 import ru.kpfu.security.repositories.FileRepository;
 import ru.kpfu.security.repositories.StudentRepository;
@@ -30,21 +31,38 @@ public class FileUploadServiceImpl implements FileUploadService {
         this.studentRepository = studentRepository;
     }
 
-
     @Override
     public File saveFile(MultipartFile file,
-                         Long studentId) throws IOException {
+                         Long studentId,
+                         FileType fileType) throws IOException {
+
         String UPLOAD_DIR = "C:\\StudyProjects\\SpringBootSecurityExample\\uploads";
+        if (fileType.equals(FileType.AVATAR)) {
+            UPLOAD_DIR = "C:\\StudyProjects\\SpringBootSecurityExample\\uploads\\avatars";
+        }
         String encodedFileName = UUID.randomUUID().toString();
+        log.info(file.toString());
         Path path = Paths.get(UPLOAD_DIR, encodedFileName +
                 file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")));
         Files.write(path, file.getBytes());
         Optional<Student> studentOpt = studentRepository.findById(studentId);
         if (studentOpt.isPresent()) {
-            File createdFile = new File(file.getOriginalFilename(), "/uploads/" + path.getFileName().toString(), studentOpt.get());
-            return fileRepository.save(createdFile);
+            Student student = studentOpt.get();
+            if (student.getFiles().stream().anyMatch(t -> t.getFileType().equals(FileType.AVATAR))) {
+                Optional<File> avatarOpt = fileRepository.findAvatarByStudentId(student.getId());
+                if (avatarOpt.isPresent()) {
+                    File avatar = avatarOpt.get();
+                    avatar.setName(file.getOriginalFilename());
+                    avatar.setPath("/uploads/avatars/" + path.getFileName().toString());
+                    return fileRepository.save(avatar);
+                }
+            } else {
+                File createdFile = new File(file.getOriginalFilename(), "/uploads/avatars/" + path.getFileName().toString(), student, fileType);
+                return fileRepository.save(createdFile);
+            }
         } else {
             throw new IOException();
         }
+        return null;
     }
 }

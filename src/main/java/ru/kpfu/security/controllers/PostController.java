@@ -1,5 +1,6 @@
 package ru.kpfu.security.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import ru.kpfu.security.utils.PostMapper;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("posts")
 public class PostController {
@@ -69,9 +71,16 @@ public class PostController {
 
     @GetMapping("/{postId}/edit")
     public String editPost(@PathVariable Long postId,
+                           @AuthenticationPrincipal Student student,
                            Model model) {
         Optional<Post> postOpt = postRepository.findById(postId);
-        postOpt.ifPresent(post -> model.addAttribute("postDTO", postMapper.postToDto(post)));
+        if (postOpt.isPresent()) {
+            Post post = postOpt.get();
+            if (!post.getAuthor().equals(student)) {
+                return null;
+            }
+            model.addAttribute("postDTO", postMapper.postToDto(post));
+        }
         return "post/post_edit";
     }
 
@@ -97,4 +106,5 @@ public class PostController {
         postRepository.save(new Post(postDTO.getTitle(), postDTO.getText(), student));
         return "redirect:/posts";
     }
+
 }

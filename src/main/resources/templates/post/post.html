@@ -53,9 +53,12 @@
         </div>
         <div class="col-5">
         </div>
-        <div class="col-2">
-            <a th:href="@{/posts/{id}/edit(id=${post.getId()})}">Edit</a>
+        <div th:if="${#authentication.getName() == post.getAuthor().getEmail()}">
+            <div class="col-2">
+                <a th:href="@{/posts/{id}/edit(id=${post.getId()})}">Edit</a>
+            </div>
         </div>
+
     </div>
 
     <form action="#" th:action="@{/posts/{postId}/comments(postId=${post.getId()})}"
@@ -66,16 +69,20 @@
         <span style="color: red" th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></span><br>
         <input type="submit" value="Comment" class="btn btn-primary">
     </form>
-    <div th:each="comment : ${comments}" class="row">
+    <div th:each="comment : ${comments}" class="row bg-light">
         <p th:text="${comment.getStudent().getName()} + ' ' +
-             ${comment.getCreatedAt()} + ': ' +
-             ${comment.getText()}" class="col-11"> Text </p>
-        <form action="#"
-              th:action="@{/posts/{postId}/comments/{commentId}(postId=${post.getId()}, commentId=${comment.getId()})}"
-              th:method="delete"
-              class="col-1">
-            <input type="image" src="#" alt="trash" th:src="@{/img/trash.png}" style="width: 100%">
-        </form>
+             ${#dates.format(comment.getCreatedAt(), 'dd MMMMM yyyy HH:mm')}" class="col-11 text-dark"> Commentary
+            info </p>
+        <div class="col-1">
+            <form action="#"
+                  th:action="@{/posts/{postId}/comments/{commentId}(postId=${post.getId()}, commentId=${comment.getId()})}"
+                  th:method="delete">
+            <span th:if="${#authentication.getName() == comment.getStudent().getEmail()}">
+                <input type="image" src="#" alt="trash" th:src="@{/img/trash.png}" style="width: 100%">
+            </span>
+            </form>
+        </div>
+        <p th:text="${comment.getText()}" class="col-11"> Text </p>
     </div>
 </div>
 </body>

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.security.models.RegistrationForm;
-import ru.kpfu.security.repositories.StudentRepository;
 import ru.kpfu.security.services.RegistrationService;
 
 @Controller

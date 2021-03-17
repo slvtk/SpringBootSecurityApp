@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+    <script th:src="@{/webjars/jquery/3.5.1/dist/jquery.min.js}"></script>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.0/css/bootstrap.css} "/>
+</head>
+<body>
+<script>
+    $(document).ready(function () {
+
+        $("#file-upload-form").on("submit", function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                url: "/fileUpload/avatar",
+                type: "POST",
+                data: new FormData(this),
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (res) {
+                    $('#pic').attr('src', res).css('display', 'inline').css('width','100px').css('height','100px');
+
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<div th:insert="~{navigation::navbar}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+
+            <form id="file-upload-form">
+                <label for="file-upload-input">Select file to upload</label>
+                <input type="file" id="file-upload-input" name="avatar">
+                <button type="submit">Upload avatar</button>
+            </form>
+
+            <img alt="pic" src="" id="pic" style="display: none">
+            <form action="#" th:action="@{/profile}"
+                  th:object="${studentDto}"
+                  th:method="patch"
+                  class="form-group">
+
+                <input type="hidden" th:field="*{id}" th:value="${studentDto.getId()}">
+
+                <label for="name">Name</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="Name" class="form-control">
+                <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span><br>
+
+                <label for="city">City</label>
+                <input type="text" th:field="*{city}" id="city" placeholder="City" class="form-control">
+                <span style="color: red" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span><br>
+
+                <label for="about">About</label>
+                <input type="text" th:field="*{about}" id="about" placeholder="About" class="form-control">
+                <span style="color: red" th:if="${#fields.hasErrors('about')}" th:errors="*{about}"></span><br>
+
+                <input type="submit" value="Edit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -23,7 +23,7 @@
                 contentType: false,
                 cache: false,
                 success: function (res) {
-                    $('#pic').attr('src', res);
+                    $('#pic').attr('src', res).css('display', 'inline');
                 },
                 error: function (err) {
                     console.error(err);
@@ -37,6 +37,6 @@
     <input type="file" id="file-upload-input" name="file">
     <button type="submit">Start Upload</button>
 </form>
-<img alt="pic" src="" id="pic">
+<img alt="pic" src="" id="pic" style="display: none">
 </body>
 </html>
